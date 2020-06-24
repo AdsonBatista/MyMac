@@ -11,11 +11,21 @@
 let $vimhome=fnamemodify(resolve(expand("~/.vimrc")), ':p:h')
 let $vundle=$vimhome."/bundle/Vundle.vim"
 
+
 " Be iMproved
 set nocompatible
 set nowritebackup
 set nobackup
 
+
+"dois ii vai direito para modo de comando
+imap ii <C-[>
+
+
+if $TERM_PROGRAM =~ "iTerm"
+    let &t_SI = "\<Esc>]50;CursorShape=1\x7" " Vertical bar in insert mode
+    let &t_EI = "\<Esc>]50;CursorShape=0\x7" " Block in normal mode
+endif
 "=====================================================
 "" Vundle settings
 "=====================================================
@@ -42,6 +52,7 @@ call vundle#begin()
     "-------------------=== Other ===-------------------------------
     Plugin 'itchyny/lightline.vim'
     Plugin 'ryanoasis/vim-devicons'
+    Plugin 'ntpeters/vim-better-whitespace'
     "Plugin 'bling/vim-airline'                  " Lean & mean status/tabline for vim
     "Plugin 'vim-airline/vim-airline-themes'     " Themes for airline
     "Plugin 'Lokaltog/powerline'                 " Powerline fonts plugin
@@ -51,7 +62,7 @@ call vundle#begin()
     Plugin 'flazz/vim-colorschemes'             " Colorschemes
     Plugin 'terryma/vim-multiple-cursors'
     Plugin 'airblade/vim-gitgutter'
-    "Plugin 'yggdroot/indentline'
+    "Plugin 'yggdroot/indentlinel'
     "let g:indentLine_char_list = ['|', '¦', '┆', '┊']
     "-------------------=== Snippets support ===--------------------
     "Plugin 'garbas/vim-snipmate'                " Snippets manager
@@ -62,7 +73,7 @@ call vundle#begin()
     "Plugin 'tpope/vim-commentary'               " Comment stuff out
     "Plugin 'mitsuhiko/vim-sparkup'              " Sparkup(XML/jinja/htlm-django/etc.) support
     "Plugin 'Rykka/riv.vim'                      " ReStructuredText plugin
-    Plugin 'Valloric/YouCompleteMe'             " Autocomplete plugin
+    "Plugin 'Valloric/YouCompleteMe'             " Autocomplete plugin
 
     "-------------------=== Python  ===-----------------------------
     Plugin 'klen/python-mode'                   " Python mode (docs, refactor, lints...)
@@ -87,12 +98,12 @@ colorscheme badwolf
 set background=dark
 
 "set number                                  " show line numbers
-:set number relativenumber 
+:set number relativenumber
 
-:augroup numbertoggle 
-  :autocmd! 
-  :autocmd BufEnter,FocusGained,InsertLeave * set relativenumber 
-  :autocmd BufLeave,FocusLost,InsertEnter * set norelativenumber 
+:augroup numbertoggle
+  :autocmd!
+  :autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  :autocmd BufLeave,FocusLost,InsertEnter * set norelativenumber
 :augroup END
 
 
@@ -108,11 +119,11 @@ set autoindent                              " indent when moving to the next lin
 set cursorline                              " shows line under the cursor's line
 set showmatch                               " shows matching part of bracket pairs (), [], {}
 
-set enc=utf-8	                            " utf-8 by default
+set enc=utf-8                             " utf-8 by default
 
-set nobackup 	                            " no backup files
+set nobackup                              " no backup files
 set nowritebackup                           " only in case you don't want a backup file while editing
-set noswapfile 	                            " no swap files
+set noswapfile                              " no swap files
 
 set backspace=indent,eol,start              " backspace removes all (indents, EOLs, start) What is start?
 
@@ -139,8 +150,8 @@ nmap <silent> <leader>q :SyntasticCheck # <CR> :bp <BAR> bd #<CR>
 
 "" Search settings
 "=====================================================
-set incsearch	                            " incremental search
-set hlsearch	                            " highlight search results
+set incsearch                             " incremental search
+set hlsearch                              " highlight search results
 
 "=====================================================
 "" AirLine settings
@@ -179,7 +190,7 @@ let g:snippets_dir='~/.vim/vim-snippets/snippets'
 let g:riv_disable_folding=1
 
 "=====================================================
-" Python settings
+"" Python settings
 "=====================================================
 
 let g:syntastic_python_python_exec='python'
@@ -288,31 +299,12 @@ let g:fzf_preview_window = ''
 " Always enable preview window on the right with 60% width
 let g:fzf_preview_window = 'right:60%'
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Atalhos
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 au Filetype python map <F5> :w<CR>:!python3<space><C-r>%<CR>
 au Filetype rmd map <F5> :w<CR>:!echo<space>"require(rmarkdown);<space>render('<C-r>%')"<space>\|<space>R<space>--vanilla<CR>
 au Filetype c map <F5> :w<CR>:!gcc<space><C-r>%<CR>:!./<C-r>%<backspace><backspace><CR>
 au Filetype tex map <F5> :w<CR>:!pdflatex<space><C-r>%<CR>:!bibtex<space>%:r.aux<CR>:!pdflatex<space><C-r>%<CR>:!pdflatex<space><C-r>%<CR>
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Cursor bar
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-if $TERM_PROGRAM =~ "iTerm"
-    let &t_SI = "\<Esc>]50;CursorShape=1\x7" " Vertical bar in insert mode
-    let &t_EI = "\<Esc>]50;CursorShape=0\x7" " Block in normal mode
-endif
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " remapping of keys
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 map <Space> <Leader>
 vnoremap y "+y
 vnoremap p "+p
@@ -336,7 +328,5 @@ nnoremap <leader>n <C-w>v<C-w>l
 nnoremap <leader><tab> :NERDTreeToggle<CR>
 nnoremap <leader>q :q<CR>
 nnoremap <leader>w :w<CR>
+nnoremap <leader>, :StripWhitespace<CR>
 nnoremap <leader><leader> :noh<cr>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-imap ii <C-[>
